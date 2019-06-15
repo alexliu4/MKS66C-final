@@ -45,7 +45,7 @@ def first_pass( commands ):
         exit()
     if frameFound and not fileFound:
         basename="anim"
-        print "Default filename: 'anim'"
+        print ("Default filename: 'anim'")
     #print commands
 
 """======== second_pass( commands ) ==========
@@ -85,14 +85,14 @@ def second_pass( commands, num_frames ):
             toVary=(end-start+0.0)/(endFrame-startFrame)
             #print str(toVary)
             if startFrame>num_frames-1 or endFrame>num_frames-1 or endFrame<startFrame or startFrame<0 or endFrame<0:
-                print "Invalid range or frame"
+                print ("Invalid range or frame")
                 exit()
             j=startFrame
             while j<endFrame+1:
                 knobs[int(j)][knobname]=start+((j-startFrame)*toVary) #dict
                 j+=1
 
-            
+
 
 def run(filename):
     """
@@ -136,7 +136,7 @@ def run(filename):
     if p:
         (commands, symbols) = p
     else:
-        print "Parsing failed."
+        print ("Parsing failed.")
         return
     first_pass(commands)
     second_pass(commands,num_frames)
@@ -303,7 +303,7 @@ def run(filename):
     if p:
         (commands, symbols) = p
     else:
-        print 'Parsing failed.'
+        print ('Parsing failed.')
         return
     gou=False
     for command in commands:

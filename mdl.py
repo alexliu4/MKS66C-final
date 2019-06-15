@@ -14,41 +14,41 @@ tokens = (
     "AMBIENT",
     "TORUS",
     "SPHERE",
-    "BOX", 
-    "LINE", 
-    "MESH", 
-    "TEXTURE", 
-    "SET", 
-    "MOVE", 
-    "SCALE", 
-    "ROTATE", 
-    "BASENAME", 
-    "SAVE_KNOBS", 
-    "TWEEN", 
-    "FRAMES", 
-    "VARY", 
-    "PUSH", 
-    "POP", 
-    "SAVE", 
-    "GENERATE_RAYFILES", 
-    "SHADING", 
-    "SHADING_TYPE", 
-    "SET_KNOBS", 
-    "FOCAL", 
-    "DISPLAY", 
-    "SCREEN", 
-    "WEB", 
+    "BOX",
+    "LINE",
+    "MESH",
+    "TEXTURE",
+    "SET",
+    "MOVE",
+    "SCALE",
+    "ROTATE",
+    "BASENAME",
+    "SAVE_KNOBS",
+    "TWEEN",
+    "FRAMES",
+    "VARY",
+    "PUSH",
+    "POP",
+    "SAVE",
+    "GENERATE_RAYFILES",
+    "SHADING",
+    "SHADING_TYPE",
+    "SET_KNOBS",
+    "FOCAL",
+    "DISPLAY",
+    "SCREEN",
+    "WEB",
     "CO"
 )
 
 reserved = {
-    "x" : "XYZ", 
-    "y" : "XYZ", 
-    "z" : "XYZ", 
-    "screen" : "SCREEN", 
+    "x" : "XYZ",
+    "y" : "XYZ",
+    "z" : "XYZ",
+    "screen" : "SCREEN",
     "light" : "LIGHT",
     "constants" : "CONSTANTS",
-    "save_coord_system" : "SAVE_COORDS", 
+    "save_coord_system" : "SAVE_COORDS",
     "camera" : "CAMERA",
     "ambient" : "AMBIENT",
     "torus" : "TORUS",
@@ -109,7 +109,7 @@ def t_CO(t):
     return t
 
 def t_error(t):
-    print "TOKEN ERROR: " + str(t)
+    print ("TOKEN ERROR: " + str(t))
 
 lex.lex()
 
@@ -331,16 +331,20 @@ def p_command_generate_rayfiles(p):
     commands.append({'op':p[1], 'args':None})
 
 def p_command_mesh(p):
-    """command : MESH CO TEXT TEXT
-               | MESH SYMBOL CO TEXT TEXT"""
-    p = list(p)
-    p.remove(":")
-    cmd = {'op':p[1], 'args' : [], 'constants':None}
-    if len(p) == 4:
-        cmd['args'].append(p[2] + p[3])
-    else:
+    """command : MESH CO TEXT
+               | MESH SYMBOL CO TEXT
+               | MESH CO TEXT SYMBOL
+               | MESH SYMBOL CO TEXT SYMBOL"""
+    cmd = {'op':p[1], 'args' : [], 'cs':None, 'constants':None}
+    arg_start = 2
+    if isinstance(p[2], str):
         cmd['constants'] = p[2]
-        cmd['args'].append(p[3] + p[4])
+        arg_start+= 1
+    cmd['args'].append(p[arg_start])
+    if len(p) == 4 and isinstance(p[3], str):
+        cmd['cs'] = p[3]
+    if len(p) == 5 and isinstance(p[4], str):
+        cmd['cs'] = p[4]
     commands.append(cmd)
 
 def p_save_knobs(p):
@@ -374,7 +378,7 @@ def p_texture(p):
     symbols[p[2]] = ['texture', p[3:]]
 
 def p_error(p):
-    print 'SYNTAX ERROR: ' + str(p)
+    print ('SYNTAX ERROR: ' + str(p))
 
 yacc.yacc()
 

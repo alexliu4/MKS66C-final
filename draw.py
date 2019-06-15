@@ -45,7 +45,7 @@ def scanline_convert(polygons, i, screen, zbuffer, color ):
             dz1 = (points[TOP][2] - points[MID][2]) / distance2 if distance2 != 0 else 0
             x1 = points[MID][0]
             z1 = points[MID][2]
-            
+
 def scanline_convertS(polygons, i, screen, zbuffer, c1,c2,c3 ):
     flip = False
     BOT = 0
@@ -134,7 +134,7 @@ def scanline_convertS(polygons, i, screen, zbuffer, c1,c2,c3 ):
             r1=c1r
             g1=c1g
             b1=c1b
-            
+
 def add_polygon( polygons, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
     add_point(polygons, x0, y0, z0);
     add_point(polygons, x1, y1, z1);
@@ -155,7 +155,7 @@ def processHashTable(vertices):
 
 def draw_polygons( matrix, screen, zbuffer, view, ambient, light, areflect, dreflect, sreflect):
     if len(matrix) < 2:
-        print 'Need at least 3 points to draw'
+        print ('Need at least 3 points to draw')
         return
 
     point = 0
@@ -174,7 +174,7 @@ def checkDup(n,li):
         if float(round(n[0],3))==float(round(a[0],3)) and float(round(n[1],3))==float(round(a[1],3)) and float(round(n[2],3))==float(round(a[2],3)):
             toRet=True
     return toRet
-        
+
 def checkFound(v,li):
     v0x=v[0]
     v0y=v[1]
@@ -187,7 +187,7 @@ def checkFound(v,li):
 
 def draw_polygonsMesh( fileName, stack, matrix, screen, zbuffer, view, ambient, light, areflect, dreflect, sreflect):
     if len(matrix) < 2:
-        print 'Need at least 3 points to draw'
+        print ('Need at least 3 points to draw')
         return
     faces=meshFaces(fileName, matrix, stack)
     vn=meshVN(fileName, matrix, stack)
@@ -249,10 +249,11 @@ def draw_polygonsMesh( fileName, stack, matrix, screen, zbuffer, view, ambient, 
             i2= get_lighting(v2sumNormal, view, ambient, light, areflect, dreflect, sreflect )
             scanline_convertS(matrix, i, screen, zbuffer, i0,i1,i2)
         i+=3
-            
+
 def draw_polygonsS( matrix, screen, zbuffer, view, ambient, light, areflect, dreflect, sreflect):
     if len(matrix) < 2:
-        print 'Need at least 3 points to draw'
+        print ('Need at least 3 points to draw')
+
         return
 
     point = 0
@@ -529,7 +530,7 @@ def add_curve( points, x0, y0, x1, y1, x2, y2, x3, y3, step, curve_type ):
 
 def draw_lines( matrix, screen, zbuffer, color ):
     if len(matrix) < 2:
-        print 'Need at least 2 points to draw'
+        print ('Need at least 2 points to draw')
         return
 
     point = 0
@@ -588,7 +589,7 @@ def draw_lineShade( x0, y0, z0, x1, y1, z1, screen, zbuffer, colorLeft, colorRig
         colorB+=dcb
         x+=1
         z+=dz
-    
+
 def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
 
     #swap points if going right -> left
@@ -676,7 +677,7 @@ def addMeshPoly(poly,verList,i1,i2,i3):
     ver2=verList[i2-1]
     ver3=verList[i3-1]
     add_polygon(poly,float(ver1[0]),float(ver1[1]),float(ver1[2]),float(ver2[0]),float(ver2[1]),float(ver2[2]),float(ver3[0]),float(ver3[1]),float(ver3[2]))
-        
+
 def drawMesh(fileName, polyList, stack):
     vertices=[]
     faces=[]
@@ -740,5 +741,3 @@ def drawMesh(fileName, polyList, stack):
         ver2=face[1]
         ver3=face[2]
         addMeshPoly(polyList,vertices,int(ver1),int(ver2),int(ver3))
-
-
