@@ -1,5 +1,5 @@
-test: face.mdl lex.py main.py matrix.py mdl.py display.py draw.py gmath.py yacc.py
-	python main.py face.mdl
+test: lamp.mdl lex.py main.py matrix.py mdl.py display.py draw.py gmath.py yacc.py
+	python main.py lamp.mdl
 
 clean:
 	rm *pyc *out parsetab.py

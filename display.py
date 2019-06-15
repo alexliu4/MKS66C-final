@@ -1,5 +1,5 @@
 from subprocess import Popen, PIPE
-from os import remove
+from os import remove, execlp, fork
 
 #constants
 XRES = 500
@@ -9,7 +9,7 @@ RED = 0
 GREEN = 1
 BLUE = 2
 
-DEFAULT_COLOR = [0, 0, 0]
+DEFAULT_COLOR = [255, 255, 255]
 
 def new_screen( width = XRES, height = YRES ):
     screen = []
@@ -29,9 +29,9 @@ def new_zbuffer( width = XRES, height = YRES ):
 
 def plot( screen, zbuffer, color, x, y, z ):
     newy = YRES - 1 - y
-    z = int((z * 1000)) / 1000.0
-
-    if ( x >= 0 and x < XRES and newy >= 0 and newy < YRES and zbuffer[newy][x] <= z):
+    z = int(z*1000/1000)
+    if ( x >= 0 and x < XRES and newy >= 0 and newy < YRES and
+         z >= zbuffer[newy][x]):
         screen[newy][x] = color[:]
         zbuffer[newy][x] = z
 
@@ -72,3 +72,11 @@ def display( screen ):
     p = Popen( ['display', ppm_name], stdin=PIPE, stdout = PIPE )
     p.communicate()
     remove(ppm_name)
+
+def make_animation( name ):
+    name_arg = 'anim/' + name + '*'
+    name = name + '.gif'
+    print 'Saving animation as ' + name
+    f = fork()
+    if f == 0:
+        execlp('convert', 'convert', '-delay', '3', name_arg, name)

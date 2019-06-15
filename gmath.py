@@ -1,18 +1,6 @@
 import math
 from display import *
 
-
-  # IMPORANT NOTE
-
-  # Ambient light is represeneted by a color value
-
-  # Point light sources are 2D arrays of doubles.
-  #      - The fist index (LOCATION) represents the vector to the light.
-  #      - The second index (COLOR) represents the color.
-
-  # Reflection constants (ka, kd, ks) are represened as arrays of
-  # doubles (red, green, blue)
-
 AMBIENT = 0
 DIFFUSE = 1
 SPECULAR = 2
@@ -21,17 +9,14 @@ COLOR = 1
 SPECULAR_EXP = 4
 
 #lighting functions
-def get_lighting(normal, view, ambient, light, symbols, reflect ):
-
-    n = normal[:]
-    normalize(n)
+def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
+    normalize(normal)
     normalize(light[LOCATION])
     normalize(view)
-    r = symbols[reflect][1]
 
-    a = calculate_ambient(ambient, r)
-    d = calculate_diffuse(light, r, n)
-    s = calculate_specular(light, r, view, n)
+    a = calculate_ambient(ambient, areflect)
+    d = calculate_diffuse(light, dreflect, normal)
+    s = calculate_specular(light, sreflect, view, normal)
 
     i = [0, 0, 0]
     i[RED] = int(a[RED] + d[RED] + s[RED])
@@ -41,25 +26,26 @@ def get_lighting(normal, view, ambient, light, symbols, reflect ):
 
     return i
 
-def calculate_ambient(alight, reflect):
+
+def calculate_ambient(alight, areflect):
     a = [0, 0, 0]
-    a[RED] = alight[RED] * reflect['red'][AMBIENT]
-    a[GREEN] = alight[GREEN] * reflect['green'][AMBIENT]
-    a[BLUE] = alight[BLUE] * reflect['blue'][AMBIENT]
+    a[RED] = alight[RED] * areflect[RED]
+    a[GREEN] = alight[GREEN] * areflect[GREEN]
+    a[BLUE] = alight[BLUE] * areflect[BLUE]
     return a
 
-def calculate_diffuse(light, reflect, normal):
+def calculate_diffuse(light, dreflect, normal):
     d = [0, 0, 0]
 
     dot = dot_product( light[LOCATION], normal)
 
     dot = dot if dot > 0 else 0
-    d[RED] = light[COLOR][RED] * reflect['red'][DIFFUSE] * dot
-    d[GREEN] = light[COLOR][GREEN] * reflect['green'][DIFFUSE] * dot
-    d[BLUE] = light[COLOR][BLUE] * reflect['blue'][DIFFUSE] * dot
+    d[RED] = light[COLOR][RED] * dreflect[RED] * dot
+    d[GREEN] = light[COLOR][GREEN] * dreflect[GREEN] * dot
+    d[BLUE] = light[COLOR][BLUE] * dreflect[BLUE] * dot
     return d
 
-def calculate_specular(light, reflect, view, normal):
+def calculate_specular(light, sreflect, view, normal):
     s = [0, 0, 0]
     n = [0, 0, 0]
 
@@ -72,9 +58,9 @@ def calculate_specular(light, reflect, view, normal):
     result = result if result > 0 else 0
     result = pow( result, SPECULAR_EXP )
 
-    s[RED] = light[COLOR][RED] * reflect['red'][SPECULAR] * result
-    s[GREEN] = light[COLOR][GREEN] * reflect['green'][SPECULAR] * result
-    s[BLUE] = light[COLOR][BLUE] * reflect['blue'][SPECULAR] * result
+    s[RED] = light[COLOR][RED] * sreflect[RED] * result
+    s[GREEN] = light[COLOR][GREEN] * sreflect[GREEN] * result
+    s[BLUE] = light[COLOR][BLUE] * sreflect[BLUE] * result
     return s
 
 def limit_color(color):
@@ -82,21 +68,30 @@ def limit_color(color):
     color[GREEN] = 255 if color[GREEN] > 255 else color[GREEN]
     color[BLUE] = 255 if color[BLUE] > 255 else color[BLUE]
 
+
 #vector functions
-#normalize vetor, should modify the parameter
 def normalize(vector):
     magnitude = math.sqrt( vector[0] * vector[0] +
                            vector[1] * vector[1] +
                            vector[2] * vector[2])
-    for i in range(3):
-        vector[i] = vector[i] / magnitude
+    if magnitude==0:
+        for i in range(3):
+            vector[i]=0
+    else:
+    #print "ZERO"
+        for i in range(3):
+            vector[i] = vector[i] / magnitude
 
-#Return the dot porduct of a . b
+def sumVectors(v1,v2):
+    N=[0,0,0]
+    N[0]=v1[0]+v2[0]
+    N[1]=v1[1]+v2[1]
+    N[2]=v1[2]+v2[2]
+    return N
+
 def dot_product(a, b):
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
 
-#Calculate the surface normal for the triangle whose first
-#point is located at index i in polygons
 def calculate_normal(polygons, i):
 
     A = [0, 0, 0]
