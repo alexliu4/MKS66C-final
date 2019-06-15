@@ -1,23 +1,21 @@
-# Graphics Final Project: Lamp
-###### Jenny Gao
-###### Period 5
+# Graphics Final Project
+## By Alexander Liu pd 5
+---
 
 ### Features
-+ Mesh: allows programmer to specify a polygon mesh defined in an external file
+- Mesh
 ```
 mesh :filename.obj
 ```
-+ Shading
+uses an external file to generate a polygon mesh
 
-For flat shading, programmer should add this line
+- Shading
+
+Flat Shading (aka normal)
 ```
 shading flat
 ```
-
-For gouraud shading, programmer should add this line
+Gourand Shading
 ```
 shading gouraud
 ```
-NOTE: 
-1. It takes a while to generate images if you increase the step size for gouraud shading.
-2. If the programmer doesn't add a line regarding shading, the default type of shading is flat shading.
