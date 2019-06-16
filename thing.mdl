@@ -2,6 +2,6 @@ push
 move 250 100 0
 scale 5 5 5
 shading gouraud
-mesh :bunnyr.obj
+mesh :bunbun.obj
 display
-save bun.png
+save finalbunny.png
