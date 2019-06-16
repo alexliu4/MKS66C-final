@@ -98,6 +98,7 @@ def run(filename):
     """
     This function runs an mdl script
     """
+
     view = [0,
             0,
             1];
