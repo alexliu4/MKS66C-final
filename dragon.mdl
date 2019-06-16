@@ -1,7 +1,0 @@
-push
-move 250 150 0
-scale 30 30 30
-shading gouraud
-mesh :bunnyr.obj
-display
-save drag.png
